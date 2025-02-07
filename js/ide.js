@@ -201,12 +201,14 @@ UNAUTHENTICATED_BASE_URL[EXTRA_CE] = UNAUTHENTICATED_EXTRA_CE_BASE_URL;
 
 // ADDED: AI models
 const AI_MODELS = {
-  //    'DeepSeek-R1': 'deepseek/deepseek-r1:free',
-  //    'Mistral 7B Instruct': 'mistralai/mistral-7b-instruct:free',
-  //    'Microsoft Phi-3 Medium 128K Instruct': 'microsoft/phi-3-medium-128k-instruct:free',
-  //    'Meta Llama 3 8B Instruct': 'meta-llama/llama-3-8b-instruct:free',
-  //    'OpenChat 3.5 7B': 'openchat/openchat-7b:free',
-  //    'Microsoft Phi-3 Mini 128K Instruct': 'microsoft/phi-3-mini-128k-instruct:free',
+  "DeepSeek-R1": "deepseek/deepseek-r1:free",
+  "Mistral 7B Instruct": "mistralai/mistral-7b-instruct:free",
+  "Microsoft Phi-3 Medium 128K Instruct":
+    "microsoft/phi-3-medium-128k-instruct:free",
+  "Meta Llama 3 8B Instruct": "meta-llama/llama-3-8b-instruct:free",
+  "OpenChat 3.5 7B": "openchat/openchat-7b:free",
+  "Microsoft Phi-3 Mini 128K Instruct":
+    "microsoft/phi-3-mini-128k-instruct:free",
   "Gemini 2.0 Flash": "google/gemini-2.0-flash-001",
   "Qwen 2.5 Coder 32B Instruct": "qwen/qwen-2.5-coder-32b-instruct",
 };
