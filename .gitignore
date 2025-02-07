@@ -1,0 +1,64 @@
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# OpenRouter API key
+config.js
+
+# Dependencies
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build output
+dist/
+build/
+out/
+
+# IDE specific files
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+.vs/
+
+# Operating System
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Cache directories
+.cache/
+.npm/
+.eslintcache
+
+# Temporary files
+*.swp
+*.swo
+*~
+
+# Test coverage
+coverage/
+
+# Debug files
+.debug/
+*.debug
+
+# Local SSL certificates
+*.pem
+*.key
+*.crt
+
+# Sensitive data
+*.pem
+*.key
+*.cert
+config.json
+secrets.json
