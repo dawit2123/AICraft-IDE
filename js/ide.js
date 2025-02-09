@@ -3,7 +3,7 @@ import {
   createTwoFilesPatch,
   parsePatch,
 } from "https://cdn.jsdelivr.net/npm/diff@5.1.0/lib/index.mjs";
-import { OPENROUTER_API_KEY } from "../config.js";
+import { OPENROUTER_API_KEY } from "../env.js";
 import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
 
 // ADDED: Markdown options
