@@ -6,7 +6,6 @@ import {
 import { OPENROUTER_API_KEY } from "../env.js";
 import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
 
-// ADDED: Markdown options
 marked.setOptions({
   gfm: true,
   breaks: true,
@@ -35,7 +34,6 @@ marked.setOptions({
   },
 });
 
-// ADDED: Markdown styles
 const markdownStyles = document.createElement("style");
 markdownStyles.textContent = `
     .markdown-content {
@@ -199,7 +197,6 @@ var UNAUTHENTICATED_BASE_URL = {};
 UNAUTHENTICATED_BASE_URL[CE] = UNAUTHENTICATED_CE_BASE_URL;
 UNAUTHENTICATED_BASE_URL[EXTRA_CE] = UNAUTHENTICATED_EXTRA_CE_BASE_URL;
 
-// ADDED: AI models
 const AI_MODELS = {
   "Gemini 2.0 Flash": "google/gemini-2.0-flash-001",
   "Mistral 7B Instruct": "mistralai/mistral-7b-instruct:free",
@@ -289,7 +286,6 @@ var layoutConfig = {
           ],
         },
         {
-          // ADDED: AI chat column configuration
           type: "column",
           width: 25,
           content: [
@@ -315,7 +311,6 @@ var gPuterFile;
 var lastFileState = "";
 var previousModel = "";
 
-// ADDED: Code pattern tips
 const DIFF_TIPS = {
   "<Link": "Ensure proper Link component usage",
   function: "Maintain function signature and documentation",
@@ -324,7 +319,6 @@ const DIFF_TIPS = {
   def: "Maintain Python function definition style",
 };
 
-// ADDED: Diff styles
 const diffStyles = document.createElement("style");
 diffStyles.textContent = `
     .diff-preview {
@@ -503,10 +497,8 @@ inlineSuggestionStyles.textContent = `
 `;
 document.head.appendChild(inlineSuggestionStyles);
 
-// ADDED: Autocomplete debounce time
 const AUTOCOMPLETE_DEBOUNCE_MS = 1500;
 
-// ADDED: Autocomplete debounce function
 function debounce(func, wait) {
   let timeout;
   return function executedFunction(...args) {
@@ -518,7 +510,6 @@ function debounce(func, wait) {
     timeout = setTimeout(later, wait);
   };
 }
-// ADDED: Auto-complete suggestions
 async function getAutoComplete(text, cursorOffset, language = "plaintext") {
   try {
     const apiKey = await getOpenRouterApiKey();
@@ -628,7 +619,6 @@ async function getAutoComplete(text, cursorOffset, language = "plaintext") {
   }
 }
 
-// ADDED: Sometimes models will yap despite prompting
 function cleanDiffOutput(diff) {
   diff.hunks.forEach((hunk) => {
     hunk.lines = hunk.lines
@@ -647,7 +637,6 @@ function cleanDiffOutput(diff) {
   return diff;
 }
 
-// ADDED: Uses the diff library to generate a diff
 function generateDiff(currentCode, proposedCode) {
   if (!currentCode.endsWith("\n")) currentCode += "\n";
   if (!proposedCode.endsWith("\n")) proposedCode += "\n";
@@ -664,7 +653,6 @@ function generateDiff(currentCode, proposedCode) {
   return cleanDiffOutput(parsePatch(diff)[0]);
 }
 
-// ADDED: Constructs the file ( Pre-diff code + diff code + post-diff code)
 function createCompleteFileView(originalCode, diff) {
   const lines = originalCode.split("\n");
   const result = [];
@@ -699,8 +687,8 @@ function createCompleteFileView(originalCode, diff) {
   return result.join("\n");
 }
 
-// ADDED: Custom line decorations for added/removed lines
-// ADDED: Key down handler to prevent editing of deletion lines
+// Done: Custom line decorations for added/removed lines
+// Done: Key down handler to prevent editing of deletion lines
 function applyDiffDecorations(editor, content) {
   const lines = content.split("\n");
   const decorations = [];
@@ -978,7 +966,7 @@ function appendMessage(role, content) {
   chatHistory.scrollTop = chatHistory.scrollHeight;
 }
 
-// ADDED: Apply smart diff comparing original content to proposed changes
+// Apply smart diff comparing original content to proposed changes
 async function applySmartDiff(originalContent, proposedChanges) {
   const apiKey = await getOpenRouterApiKey();
 
@@ -1071,7 +1059,7 @@ async function applySmartDiff(originalContent, proposedChanges) {
   }
 }
 
-// ADDED: Agentic process for handling user input and overall ai chat flow
+// Agentic process for handling user input and overall ai chat flow
 async function agenticProcess(userInput) {
   lastFileState = sourceEditor.getValue();
   const maxAttempts = 3;
@@ -1266,7 +1254,7 @@ async function agenticProcess(userInput) {
   return !hasError;
 }
 
-// ADDED: Generate prompt for ai chat (Kind of outdated due to new models)
+// Generate prompt for ai chat (Kind of outdated due to new models)
 async function generatePrompt(
   userInput,
   hasNewModel,
@@ -1610,7 +1598,7 @@ function openFile(content, filename) {
   setSourceCodeName(filename);
 }
 
-function saveFile(content, filename) {
+function downloadFile(content, filename) {
   const blob = new Blob([content], { type: "text/plain" });
   const link = document.createElement("a");
   link.href = URL.createObjectURL(blob);
@@ -1642,7 +1630,7 @@ async function saveAction() {
       setSourceCodeName(gPuterFile.name);
     }
   } else {
-    saveFile(sourceEditor.getValue(), getSourceCodeName());
+    downloadFile(sourceEditor.getValue(), getSourceCodeName());
   }
 }
 
