@@ -88,16 +88,6 @@ Users can choose from a variety of AI models, including:
 
 ---
 
-## ⚡ Tech Stack
-
-- **Frontend:** React, Tailwind CSS
-- **Backend:** Node.js, Express
-- **Compiler Engine:** Judge0 API
-- **AI Models:** Gemini, Mistral, Llama 3, Phi-3, Qwen, OpenChat
-- **Database:** MongoDB
-
----
-
 ### 📌 Developed by **Dawit Zewdu**
 
 🚀 AI Craft is designed to redefine the coding experience with **AI-powered intelligence** and **seamless debugging**. Stay tuned for more updates!
