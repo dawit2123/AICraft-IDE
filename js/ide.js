@@ -3,8 +3,8 @@ import {
   createTwoFilesPatch,
   parsePatch,
 } from "https://cdn.jsdelivr.net/npm/diff@5.1.0/lib/index.mjs";
-import { OPENROUTER_API_KEY } from "../env.js";
 import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+let openRouterApiKey = null;
 
 marked.setOptions({
   gfm: true,
@@ -1146,7 +1146,7 @@ async function agenticProcess(userInput) {
         return true;
       }
 
-      appendMessage("assistant", "Applying changes intelligently...");
+      appendMessage("assistant", "Applying changes...");
 
       const currentCode = sourceEditor.getValue();
       const proposedCode = await applySmartDiff(currentCode, proposedChanges);
@@ -1834,11 +1834,12 @@ document.addEventListener("DOMContentLoaded", async function () {
           break;
         case "s": // Ctrl+S, Cmd+S
           e.preventDefault();
-          save();
+          console.log("d key pressed");
+          saveAction();
           break;
         case "o": // Ctrl+O, Cmd+O
           e.preventDefault();
-          open();
+          openAction();
           break;
         case "+": // Ctrl+Plus
         case "=": // Some layouts use '=' for '+'
@@ -2203,27 +2204,73 @@ document.addEventListener("DOMContentLoaded", async function () {
       const chatContainer = document.createElement("div");
       chatContainer.id = "chat-container";
       chatContainer.style.cssText = `
-                height: 100%;
-                width: 100%;
-                display: flex;
-                flex-direction: column;
-                background: #1e1e1e;
-                color: #d4d4d4;
-                font-family: 'JetBrains Mono', monospace;
-            `;
+          height: 100%;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          background: #1e1e1e;
+          color: #d4d4d4;
+          font-family: 'JetBrains Mono', monospace;
+      `;
 
-      // ADDED: Model selector setup
+      // Create API Key elements programmatically
+      const apiKeyContainer = document.createElement("div");
+      apiKeyContainer.style.cssText = `
+          padding: 10px; 
+          border-bottom: 1px solid #3c3c3c;
+          display: flex;
+          gap: 5px;
+      `;
+
+      const apiKeyInput = document.createElement("input");
+      apiKeyInput.type = "password";
+      apiKeyInput.placeholder = "Enter OpenRouter API Key";
+      apiKeyInput.style.cssText = `
+          flex-grow: 1;
+          padding: 6px;
+          background: #2d2d2d;
+          color: #d4d4d4;
+          border: 1px solid #3c3c3c;
+          border-radius: 4px;
+      `;
+
+      const saveKeyBtn = document.createElement("button");
+      saveKeyBtn.textContent = "Save Key";
+      saveKeyBtn.style.cssText = `
+          padding: 6px 12px;
+          background: rgba(22, 119, 194, 0.69);
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+      `;
+
+      // Add event listener directly to the button element
+      saveKeyBtn.addEventListener("click", () => {
+        openRouterApiKey = apiKeyInput.value.trim();
+        if (openRouterApiKey) {
+          appendMessage("system", "API key saved successfully!");
+        }
+      });
+
+      // Assemble API key components
+      apiKeyContainer.appendChild(apiKeyInput);
+      apiKeyContainer.appendChild(saveKeyBtn);
+      chatContainer.appendChild(apiKeyContainer);
+
+      // Model Selector
       const modelSelector = document.createElement("select");
       modelSelector.id = "ai-model-selector";
       modelSelector.style.cssText = `
-                margin: 10px;
-                padding: 5px;
-                background: #2d2d2d;
-                color: #d4d4d4;
-                border: 1px solid #3c3c3c;
-                border-radius: 4px;
-                font-family: inherit;
-            `;
+          margin: 10px;
+          padding: 5px;
+          background: #2d2d2d;
+          color: #d4d4d4;
+          border: 1px solid #3c3c3c;
+          border-radius: 4px;
+          font-family: inherit;
+      `;
+
       Object.entries(AI_MODELS).forEach(([name, value]) => {
         const option = document.createElement("option");
         option.value = value;
@@ -2231,76 +2278,70 @@ document.addEventListener("DOMContentLoaded", async function () {
         modelSelector.appendChild(option);
       });
 
-      // ADDED: Chat history area setup
+      chatContainer.appendChild(modelSelector);
+
+      // Chat History
       const chatHistory = document.createElement("div");
       chatHistory.id = "chat-history";
       chatHistory.style.cssText = `
-                flex-grow: 1;
-                overflow-y: auto;
-                padding: 10px;
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-            `;
+          flex-grow: 1;
+          overflow-y: auto;
+          padding: 10px;
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+      `;
+      chatContainer.appendChild(chatHistory);
 
-      // ADDED: Input container setup
+      // Input Container
       const inputContainer = document.createElement("div");
       inputContainer.style.cssText = `
-                display: flex;
-                gap: 10px;
-                padding: 10px;
-                border-top: 1px solid #3c3c3c;
-                margin-bottom: 22px;
-                align-items: flex-end;
-            `;
+          display: flex;
+          gap: 10px;
+          padding: 10px;
+          border-top: 1px solid #3c3c3c;
+          margin-bottom: 22px;
+          align-items: flex-end;
+      `;
 
-      // ADDED: Textarea for input setup
+      // Textarea
       const textarea = document.createElement("textarea");
-      textarea.id = "chat-input";
       textarea.placeholder = "Type your message here...";
+      textarea.id = "chat-input";
       textarea.style.cssText = `
-                flex-grow: 1;
-                padding: 8px;
-                background: #2d2d2d;
-                color: #d4d4d4;
-                border: 1px solid #3c3c3c;
-                border-radius: 4px;
-                font-family: inherit;
-                min-height: 20px;
-                max-height: 150px;
-                height: auto;
-                resize: none;
-                overflow-y: hidden;
-            `;
+          flex-grow: 1;
+          padding: 8px;
+          background: #2d2d2d;
+          color: #d4d4d4;
+          border: 1px solid #3c3c3c;
+          border-radius: 4px;
+          font-family: inherit;
+          min-height: 20px;
+          max-height: 150px;
+          height: auto;
+          resize: none;
+          overflow-y: hidden;
+      `;
 
-      // ADDED: Auto-resize functionality
+      // Auto-resize
       textarea.addEventListener("input", function () {
         this.style.height = "auto";
-        const newHeight = Math.min(Math.max(this.scrollHeight, 20), 150);
-        this.style.height = newHeight + "px";
+        this.style.height = `${Math.min(this.scrollHeight, 150)}px`;
       });
 
-      setTimeout(() => {
-        const event = new Event("input", { bubbles: true });
-        textarea.dispatchEvent(event);
-      }, 0);
-
-      // ADDED: Submit button setup
+      // Submit Button
       const submitButton = document.createElement("button");
-      submitButton.id = "chat-submit";
       submitButton.textContent = "Send";
       submitButton.style.cssText = `
-                padding: 8px 16px;
-                background: #0e639c;
-                color: white;
-                border: none;
-                border-radius: 4px;
-                cursor: pointer;
-                font-family: inherit;
-                height: 36px;
-                min-height: 36px;
-                align-self: flex-end;
-            `;
+          padding: 8px 16px;
+          background: #0e639c;
+          color: white;
+          border: none;
+          border-radius: 4px;
+          cursor: pointer;
+          height: 36px;
+          align-self: flex-end;
+      `;
 
       submitButton.addEventListener("mouseover", () => {
         submitButton.style.background = "#1177bb";
@@ -2308,6 +2349,16 @@ document.addEventListener("DOMContentLoaded", async function () {
       submitButton.addEventListener("mouseout", () => {
         submitButton.style.background = "#0e639c";
       });
+
+      // Event Handlers
+      const handleChatSubmit = () => {
+        const input = textarea.value.trim();
+        if (!input) return;
+
+        appendMessage("user", input);
+        textarea.value = "";
+        agenticProcess(input);
+      };
 
       textarea.addEventListener("keydown", (e) => {
         if (e.key === "Enter" && !e.shiftKey) {
@@ -2318,26 +2369,19 @@ document.addEventListener("DOMContentLoaded", async function () {
 
       submitButton.addEventListener("click", handleChatSubmit);
 
+      // Assemble input components
       inputContainer.appendChild(textarea);
       inputContainer.appendChild(submitButton);
-
-      chatContainer.appendChild(modelSelector);
-      chatContainer.appendChild(chatHistory);
       chatContainer.appendChild(inputContainer);
 
+      // Final attachment to container
       container.getElement()[0].appendChild(chatContainer);
       aiChatEditor = chatContainer;
 
-      async function handleChatSubmit() {
-        const input = textarea.value.trim();
-        if (!input) return;
-
-        appendMessage("user", input);
-
-        textarea.value = "";
-
-        agenticProcess(input);
-      }
+      // Initialize textarea height
+      setTimeout(() => {
+        textarea.dispatchEvent(new Event("input"));
+      }, 0);
     });
 
     layout.on("initialised", function () {
@@ -2621,17 +2665,17 @@ function getSelectedModel() {
 
 // ADDED: Function to get OpenRouter API key
 async function getOpenRouterApiKey() {
-  if (!OPENROUTER_API_KEY) {
+  if (!openRouterApiKey) {
     throw new Error("OpenRouter API key not found in configuration");
   }
-  return OPENROUTER_API_KEY;
+  return openRouterApiKey;
 }
 
 // ADDED: Function to add highlighted text to the AI Chat (Context Menu)
 function addAIChatContextMenu(editor) {
   editor.addAction({
     id: "add-to-ai-chat",
-    label: "Start Chat with Selected Text",
+    label: "Start Chat with Selected Code",
     contextMenuGroupId: "ai",
     contextMenuOrder: 1.5,
     run: function (editor) {
