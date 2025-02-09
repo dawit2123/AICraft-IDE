@@ -72,19 +72,19 @@ Users can choose from a variety of AI models, including:
 
 ### AI Chat Interface
 
-![AI Chat](https://github.com/dawit2123/AICraft/blob/main/Demo/ai_chat.png)
+![AI Chat](https://github.com/dawit2123/AICraft-IDE/blob/master/Demo/chat.png)
 
-### Inline Code Chat
+### Auto Complete
 
-![Inline Code Chat](https://github.com/dawit2123/AICraft/blob/main/Demo/inline_chat.png)
+![Auto Complete](https://github.com/dawit2123/AICraft-IDE/blob/master/Demo/Auto%20Complete.png)
 
-### AI Debugging & Fix Suggestions
+### Show diff
 
-![AI Debugging](https://github.com/dawit2123/AICraft/blob/main/Demo/ai_debug.png)
+![Show difference](https://github.com/dawit2123/AICraft-IDE/blob/master/Demo/show%20different.png)
 
-### AI-Powered Autocomplete
+### Chat with selected code
 
-![Autocomplete](https://github.com/dawit2123/AICraft/blob/main/Demo/autocomplete.png)
+![Chat with selected code](https://github.com/dawit2123/AICraft-IDE/blob/master/Demo/start%20chat%20with%20selected%20code.png)
 
 ---
 
