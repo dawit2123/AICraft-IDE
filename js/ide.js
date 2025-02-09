@@ -2631,7 +2631,7 @@ async function getOpenRouterApiKey() {
 function addAIChatContextMenu(editor) {
   editor.addAction({
     id: "add-to-ai-chat",
-    label: "Add to AI Chat",
+    label: "Start Chat with Selected Text",
     contextMenuGroupId: "ai",
     contextMenuOrder: 1.5,
     run: function (editor) {
