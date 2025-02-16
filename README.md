@@ -61,7 +61,7 @@ Users can choose from a variety of AI models, including:
 - Users can highlight specific code segments to chat with AI for tailored recommendations.
 - The AI provides explanations, optimizations, and debugging tips.
 
-### 4️⃣ **AI-Powered Autocomplete & Code Generation**
+### 4️⃣ **AI-Powered Autocomplete & Code Generation **
 
 - AI suggests relevant code completions while typing.
 - Users can generate full function implementations based on descriptions.
