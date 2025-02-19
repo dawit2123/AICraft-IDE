@@ -7,6 +7,7 @@
 Welcome to **AI Craft**! This AI-powered coding environment enhances the development experience by integrating real-time AI assistance. Inspired by **Cursor IDE**, AI Craft provides an interactive chat interface for debugging, inline code assistance, AI-driven fixes for compilation errors, and AI-powered autocomplete & code generation.
 
 With support for multiple AI models—including **Gemini, DeepSeek, Llama 3, Mistral, Phi-3, and Qwen**—AI Craft empowers developers with flexible, cutting-edge AI solutions tailored to their coding needs.
+To use it online: [Click here](https://aicraftide.netlify.app/)
 
 ---
 
