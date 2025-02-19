@@ -76,7 +76,6 @@ Users can choose from a variety of AI models, including:
 - Create your own API Key in the Open Router website [Click Here to Create](https://openrouter.ai/settings/keys)
 - Add the key to website and click Save
 - Enjoy it😊.
-
 ---
 
 ## 🎥 Demo Screenshots
