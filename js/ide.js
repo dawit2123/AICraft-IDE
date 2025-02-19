@@ -2216,39 +2216,46 @@ document.addEventListener("DOMContentLoaded", async function () {
       // Create API Key elements programmatically
       const apiKeyContainer = document.createElement("div");
       apiKeyContainer.style.cssText = `
-          padding: 10px; 
-          border-bottom: 1px solid #3c3c3c;
-          display: flex;
-          gap: 5px;
-      `;
+    padding: 10px; 
+    border-bottom: 1px solid #3c3c3c;
+    display: flex;
+    gap: 5px;
+`;
 
       const apiKeyInput = document.createElement("input");
       apiKeyInput.type = "password";
       apiKeyInput.placeholder = "Enter OpenRouter API Key";
       apiKeyInput.style.cssText = `
-          flex-grow: 1;
-          padding: 6px;
-          background: #2d2d2d;
-          color: #d4d4d4;
-          border: 1px solid #3c3c3c;
-          border-radius: 4px;
-      `;
+    flex-grow: 1;
+    padding: 6px;
+    background: #2d2d2d;
+    color: #d4d4d4;
+    border: 1px solid #3c3c3c;
+    border-radius: 4px;
+`;
+
+      // Load API key from localStorage if available
+      const storedApiKey = localStorage.getItem("openRouterApiKey");
+      if (storedApiKey) {
+        apiKeyInput.value = storedApiKey;
+      }
 
       const saveKeyBtn = document.createElement("button");
       saveKeyBtn.textContent = "Save Key";
       saveKeyBtn.style.cssText = `
-          padding: 6px 12px;
-          background: rgba(22, 119, 194, 0.69);
-          color: white;
-          border: none;
-          border-radius: 4px;
-          cursor: pointer;
-      `;
+    padding: 6px 12px;
+    background: rgba(22, 119, 194, 0.69);
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+`;
 
-      // Add event listener directly to the button element
+      // Save API key to localStorage on button click
       saveKeyBtn.addEventListener("click", () => {
         openRouterApiKey = apiKeyInput.value.trim();
         if (openRouterApiKey) {
+          localStorage.setItem("openRouterApiKey", openRouterApiKey);
           appendMessage("system", "API key saved successfully!");
         }
       });
@@ -2664,13 +2671,14 @@ function getSelectedModel() {
 }
 
 // ADDED: Function to get OpenRouter API key
+// Function to get OpenRouter API key
 async function getOpenRouterApiKey() {
+  openRouterApiKey = localStorage.getItem("openRouterApiKey");
   if (!openRouterApiKey) {
     throw new Error("OpenRouter API key not found in configuration");
   }
   return openRouterApiKey;
 }
-
 // ADDED: Function to add highlighted text to the AI Chat (Context Menu)
 function addAIChatContextMenu(editor) {
   editor.addAction({
