@@ -52,7 +52,7 @@ Users can choose from a variety of AI models, including:
 ✅ **OpenChat 3.5 7B**  
 ✅ **DeepSeek-R1**
 
-### 2️⃣ **Code Execution & AI Debugging**
+### 2️⃣ **Code Execution, Bug Finder & AI Debugging**
 
 - The system compiles user code using **Judge0 IDE**.
 - If compilation fails, AI analyzes the error and suggests potential fixes.

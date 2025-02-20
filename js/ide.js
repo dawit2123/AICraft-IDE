@@ -2198,7 +2198,27 @@ document.addEventListener("DOMContentLoaded", async function () {
         }
       });
     });
+    // Add the Bug Finder button to the UI
+    const bugFinderBtn = document.createElement("button");
+    bugFinderBtn.id = "bug-finder-btn";
+    bugFinderBtn.textContent = "Bug Finder";
+    bugFinderBtn.style.cssText = `
+    padding: 8px 16px;
+    background: #F20815;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-left: 10px;
+`;
 
+    // Append the button to the toolbar or wherever you want it to appear
+    document.getElementById("judge0-site-navigation").appendChild(bugFinderBtn);
+
+    // Add event listener to the Bug Finder button
+    document
+      .getElementById("bug-finder-btn")
+      .addEventListener("click", handleBugFinderClick);
     // ADDED: AI chat setup layout setup
     layout.registerComponent("ai-chat", function (container, state) {
       const chatContainer = document.createElement("div");
@@ -2705,7 +2725,91 @@ function addAIChatContextMenu(editor) {
     },
   });
 }
+// Function to handle the Bug Finder button click
+async function handleBugFinderClick() {
+  const code = sourceEditor.getValue();
+  if (code.trim() === "") {
+    showError("Error", "Source code can't be empty!");
+    return;
+  }
 
+  // Add a message to the chat history indicating that the bug-finding process has started
+  appendMessage(
+    "assistant",
+    "Bug-finding process started. Analyzing code for potential bugs..."
+  );
+
+  try {
+    const apiKey = await getOpenRouterApiKey();
+    const response = await fetch(
+      "https://openrouter.ai/api/v1/chat/completions",
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${apiKey}`,
+          "Content-Type": "application/json",
+          "HTTP-Referer": window.location.href,
+          "X-Title": "Cursor IDE",
+        },
+        body: JSON.stringify({
+          model: "google/gemini-2.0-flash-001", // Use Gemini model
+          messages: [
+            {
+              role: "user",
+              content: `Analyze this code for potential bugs and suggest fixes:\n\n${code}`,
+            },
+          ],
+          temperature: 0.1,
+          max_tokens: 1000,
+        }),
+      }
+    );
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const data = await response.json();
+    let analysis = data.choices[0].message.content;
+
+    // Clean up the analysis response
+    analysis = cleanAnalysisResponse(analysis);
+
+    // Display the analysis in the chat or output area
+    appendMessage("assistant", `Bug Analysis:\n${analysis}`);
+  } catch (error) {
+    console.error("Error in bug finder:", error);
+    appendMessage("assistant", `Error: ${error.message}`);
+  }
+}
+
+// Function to clean up the analysis response
+function cleanAnalysisResponse(analysis) {
+  // Remove markdown code blocks
+  analysis = analysis.replace(/```.*?```/gs, "");
+
+  // Trim leading and trailing whitespace
+  analysis = analysis.replace(/^\s+|\s+$/g, "");
+
+  // Handle indentation
+  analysis = analysis
+    .split("\n")
+    .map((line) => {
+      const spaces = line.match(/^ */)[0].length;
+      const indentLevel = Math.floor(spaces / 4);
+      return "    ".repeat(indentLevel) + line.trimLeft();
+    })
+    .join("\n");
+
+  // Remove unnecessary indentation
+  const finalIndent = "    ".repeat(0); // Adjust this if needed
+  analysis = analysis
+    .split("\n")
+    .map((line) => line.replace(finalIndent, ""))
+    .join("\n");
+
+  return analysis;
+}
 // ADDED: Function to analyze output error sentiment
 async function analyzeOutputError(output) {
   try {
