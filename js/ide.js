@@ -2752,7 +2752,7 @@ async function handleBugFinderClick() {
           "X-Title": "Cursor IDE",
         },
         body: JSON.stringify({
-          model: "google/gemini-2.0-flash-001", // Use Gemini model
+          model: "google/gemini-2.0-flash-001",
           messages: [
             {
               role: "user",
