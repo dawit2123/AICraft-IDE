@@ -2756,7 +2756,7 @@ async function handleBugFinderClick() {
           messages: [
             {
               role: "user",
-              content: `Analyze this code for potential bugs and suggest fixes:\n\n${code}`,
+              content: `Analyze this code for potential bugs and suggest fixes. I want to be also short like around 1 paragraph:\n\n${code}`,
             },
           ],
           temperature: 0.1,
